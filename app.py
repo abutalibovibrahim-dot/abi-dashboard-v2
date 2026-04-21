@@ -53,10 +53,14 @@ T = {
 LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="IBM Plex Mono, monospace", color=T["primary"], size=11),
+    # font applies to all text EXCEPT titles (which use their own font dict)
+    font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=11),
+    # title_font sets the default for ALL chart titles globally
+    # Change T["primary"] here to change every chart title colour at once
+    title_font=dict(family="IBM Plex Mono, monospace", color=T["primary"], size=13),
     margin=dict(l=40, r=20, t=40, b=40),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
-                borderwidth=1, font=dict(size=10)),
+                borderwidth=1, font=dict(size=10, color=T["muted"])),
 )
 # xaxis and yaxis deliberately excluded from LAYOUT.
 # Passing xaxis=dict(...) via **LAYOUT alongside xaxis_title= causes
@@ -71,7 +75,14 @@ def _ax(fig, subplots=False, rows=2, cols=1):
     row/col args only valid on subplot figures — passing them to a regular figure
     raises Exception from plotly.basedatatypes._validate_get_grid_ref().
     """
-    s = dict(gridcolor=T["cgrid"], linecolor=T["cline"], zerolinecolor=T["cline"])
+    s = dict(
+        gridcolor=T["cgrid"],
+        linecolor=T["cline"],
+        zerolinecolor=T["cline"],
+        # axis tick labels and titles use muted — visible but not competing with chart titles
+        tickfont=dict(family="IBM Plex Mono, monospace", color=T["muted"], size=10),
+        title_font=dict(family="IBM Plex Mono, monospace", color=T["muted"], size=11),
+    )
     if subplots:
         for r in range(1, rows+1):
             for c in range(1, cols+1):
@@ -674,7 +685,7 @@ def chart_prices(df,tickers,focus):
             line=dict(color=_c(tkr),width=2.5 if tkr==focus else 1.5),
             hovertemplate=f"<b>{tkr}</b><br>%{{x|%d %b %Y}}<br>%{{y:.1f}}<extra></extra>"))
     fig.update_layout(**LAYOUT,height=360,
-        title=dict(text="Indexed Price Performance (Base = 100)",font=dict(size=11),x=0),
+        title=dict(text="Indexed Price Performance (Base = 100)",x=0),
         yaxis_title="Indexed",hovermode="x unified")
     _ax(fig)
     return fig
@@ -687,7 +698,7 @@ def chart_scatter(df,focus):
     fig=go.Figure()
     if df_s.empty:
         fig.update_layout(**LAYOUT,height=360,
-            title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=11),x=0))
+            title=dict(text="EV/EBITDA vs Revenue Growth",x=0))
         _ax(fig)
         fig.add_annotation(text="Insufficient data — EV/EBITDA or Rev Growth unavailable",
             xref="paper",yref="paper",x=0.5,y=0.5,showarrow=False,
@@ -710,7 +721,7 @@ def chart_scatter(df,focus):
                            f"Mkt Cap: ${row['Mkt Cap ($B)']}B<extra></extra>")))
     med=df_s["EV/EBITDA"].median()
     fig.update_layout(**LAYOUT,height=360,showlegend=False,
-        title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=11),x=0),
+        title=dict(text="EV/EBITDA vs Revenue Growth",x=0),
         xaxis_title="Rev Growth YoY (%)",yaxis_title="EV/EBITDA (x)")
     _ax(fig)
     fig.add_hline(y=med,line_dash="dash",line_color=T["faint"],
@@ -725,7 +736,7 @@ def chart_bar(series,title,suffix,focus):
         textposition="outside",
         textfont=dict(size=10,family="IBM Plex Mono, monospace")))
     fig.update_layout(**LAYOUT,height=max(240,len(s)*40),
-        title=dict(text=title,font=dict(size=11),x=0),showlegend=False)
+        title=dict(text=title,x=0),showlegend=False)
     _ax(fig)
     fig.update_xaxes(showgrid=False)
     return fig
@@ -737,7 +748,7 @@ def chart_leverage(df,focus):
         text=[f"{v:.1f}x" for v in d.values],textposition="outside",
         textfont=dict(size=10,family="IBM Plex Mono, monospace")))
     fig.update_layout(**LAYOUT,height=280,
-        title=dict(text="Net Debt / EBITDA",font=dict(size=11),x=0),
+        title=dict(text="Net Debt / EBITDA",x=0),
         yaxis_title="Net Debt / EBITDA (x)")
     _ax(fig)
     fig.add_hline(y=3.0,line_dash="dash",line_color=T["red"],
@@ -760,7 +771,7 @@ def chart_candle(hist,ticker):
     fig.add_trace(go.Bar(x=h.index,y=h["Volume"],marker_color=clrs,
         name="Volume",showlegend=False),row=2,col=1)
     fig.update_layout(**LAYOUT,height=440,
-        title=dict(text=f"{ticker} — Price & Volume | MA50 · MA200",font=dict(size=11),x=0),
+        title=dict(text=f"{ticker} — Price & Volume | MA50 · MA200",x=0),
         xaxis_rangeslider_visible=False)
     _ax(fig, subplots=True, rows=2, cols=1)
     fig.update_yaxes(title_text="Volume",row=2,col=1)
@@ -778,7 +789,7 @@ def chart_waterfall(res):
         text=[f"${v:.1f}B" if isinstance(v,(int,float)) else "" for v in values],
         textfont=dict(size=9,family="IBM Plex Mono, monospace",color=T["muted"])))
     fig.update_layout(**LAYOUT,height=380,showlegend=False,
-        title=dict(text="DCF Value Bridge ($B)",font=dict(size=11),x=0))
+        title=dict(text="DCF Value Bridge ($B)",x=0))
     _ax(fig)
     return fig
 
@@ -788,7 +799,7 @@ def chart_fcf(res):
         text=[f"${v:.2f}B" for v in res["fcf"]],textposition="outside",
         textfont=dict(size=9,family="IBM Plex Mono, monospace")))
     fig.update_layout(**LAYOUT,height=280,
-        title=dict(text="Projected Free Cash Flow ($B)",font=dict(size=11),x=0),
+        title=dict(text="Projected Free Cash Flow ($B)",x=0),
         yaxis_title="FCF ($B)",showlegend=False)
     _ax(fig)
     return fig
@@ -842,7 +853,6 @@ def chart_heatmap(sens_df, cur_price):
         margin=dict(l=60, r=40, t=40, b=40),
         title=dict(
             text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
-            font=dict(size=11),
             x=0,
         ),
         xaxis_title="Terminal Growth Rate",
@@ -1544,8 +1554,7 @@ with tab2:
                 annotation_text=f"Current ${cur_price:.2f}",
                 annotation_font_size=10,annotation_font_color=T["amber"])
         fig_ff.update_layout(**LAYOUT,height=340,showlegend=False,
-            title=dict(text="Football Field — Implied Share Price Range by Methodology",
-                       font=dict(size=11),x=0),
+            title=dict(text="Football Field — Implied Share Price Range by Methodology",x=0),
             xaxis_title="Implied Share Price ($)",barmode="overlay")
         _ax(fig_ff)
         st.plotly_chart(fig_ff,use_container_width=True,config={"displayModeBar":False})
