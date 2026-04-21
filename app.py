@@ -72,11 +72,52 @@ html,body,[class*="css"],.stApp,
 section[data-testid="stSidebar"],
 div[data-testid="stAppViewContainer"],
 div[data-testid="stHeader"],
+div[data-testid="stToolbar"],
+div[data-testid="stDecoration"],
+div[data-testid="stStatusWidget"],
+div[data-testid="stDeployButton"],
+header[data-testid="stHeader"],
 .main,.block-container {{
     background-color:{T["bg"]} !important;
     color:{T["muted"]} !important;
     font-family:'IBM Plex Sans',sans-serif;
 }}
+
+/* ── Top bar: the white strip at the very top of Streamlit apps ── */
+/* Streamlit renders a header bar with a white background by default. */
+/* These selectors target every known variant across Streamlit versions. */
+header[data-testid="stHeader"] {{
+    background-color:{T["bg"]} !important;
+    border-bottom:1px solid {T["border"]} !important;
+}}
+div[data-testid="stToolbar"] {{
+    background-color:{T["bg"]} !important;
+}}
+/* The decoration bar is a 2px coloured stripe at the very top */
+div[data-testid="stDecoration"] {{
+    background:{T["red"]} !important;
+    height:2px !important;
+}}
+/* Status widget (hamburger menu area) */
+div[data-testid="stStatusWidget"] {{
+    background-color:{T["bg"]} !important;
+}}
+/* The "Deploy" button area */
+div[data-testid="stDeployButton"] {{
+    background-color:{T["bg"]} !important;
+}}
+/* Main app view container background */
+div[data-testid="stAppViewContainer"] {{
+    background-color:{T["bg"]} !important;
+}}
+/* Catch-all for any remaining white containers */
+.stApp > header {{
+    background-color:{T["bg"]} !important;
+}}
+.stApp > div:first-child {{
+    background-color:{T["bg"]} !important;
+}}
+
 .main .block-container {{ padding:1.5rem 2rem; max-width:1400px; }}
 [data-testid="stSidebar"] {{
     background-color:{T["card"]} !important;
