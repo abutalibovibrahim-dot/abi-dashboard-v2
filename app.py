@@ -638,7 +638,7 @@ def chart_heatmap(sens_df,cur_price):
         zmid=cur_price,showscale=True,
         colorbar=dict(tickfont=dict(family="IBM Plex Mono, monospace",size=9),
                       title=dict(text="Price ($)",font=dict(size=9)))))
-  layout_no_margin = {k:v for k,v in LAYOUT.items() if k != "margin"}
+layout_no_margin = {k:v for k,v in LAYOUT.items() if k != "margin"}
 fig.update_layout(**layout_no_margin, height=320,
     margin=dict(l=60,r=40,t=40,b=40),
     title=dict(text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
