@@ -53,8 +53,8 @@ T = {
 LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="IBM Plex Mono, monospace", color=T["primary"], size=14),
-    title=dict(font=dict(color=T["primary"])),
+    font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=11),
+    title=dict(font=dict(color=T["primary"])),  
     margin=dict(l=40, r=20, t=40, b=40),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
@@ -636,7 +636,7 @@ def chart_prices(df,tickers,focus):
             line=dict(color=_c(tkr),width=2.5 if tkr==focus else 1.5),
             hovertemplate=f"<b>{tkr}</b><br>%{{x|%d %b %Y}}<br>%{{y:.1f}}<extra></extra>"))
     fig.update_layout(**LAYOUT,height=360,
-        title=dict(text="Indexed Price Performance (Base = 100)",font=dict(size=14),x=0),
+        title=dict(text="Indexed Price Performance (Base = 100)",font=dict(size=11),x=0),
         yaxis_title="Indexed",hovermode="x unified")
     return fig
 
@@ -648,10 +648,10 @@ def chart_scatter(df,focus):
     fig=go.Figure()
     if df_s.empty:
         fig.update_layout(**LAYOUT,height=360,
-            title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=14),x=0))
+            title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=11),x=0))
         fig.add_annotation(text="Insufficient data — EV/EBITDA or Rev Growth unavailable",
             xref="paper",yref="paper",x=0.5,y=0.5,showarrow=False,
-            font=dict(color=T["faint"],size=14))
+            font=dict(color=T["faint"],size=11))
         return fig
     for _,row in df_s.iterrows():
         tkr=row["Ticker"]
@@ -797,7 +797,7 @@ def chart_heatmap(sens_df, cur_price):
         margin=dict(l=60, r=40, t=40, b=40),
         title=dict(
             text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
-            font=dict(size=14),
+            font=dict(size=11),
             x=0,
         ),
         xaxis_title="Terminal Growth Rate",
