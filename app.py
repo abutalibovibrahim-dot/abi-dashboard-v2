@@ -58,7 +58,7 @@ LAYOUT = dict(
     title=dict(font=dict(color=T["primary"], size 14),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
-)
+))
 
 def _ax(fig, subplots=False, rows=2, cols=1):
     """
