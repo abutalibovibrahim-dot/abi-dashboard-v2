@@ -644,7 +644,7 @@ fig.update_layout(**layout_no_margin, height=320,
     title=dict(text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
                font=dict(size=11),x=0),
     xaxis_title="Terminal Growth Rate", yaxis_title="WACC")
-  return fig
+    return fig
 # ─────────────────────────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────────────────────────
