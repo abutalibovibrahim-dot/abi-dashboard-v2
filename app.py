@@ -3,6 +3,8 @@
   EQUITY RESEARCH DASHBOARD
   Tab 1 — Trading Comparables + News Feed
   Tab 2 — Valuation (DCF + EV/EBITDA Exit + Football Field)
+  Author: [Your Name]
+  Stack:  Python · Streamlit · yfinance · Plotly
 ═══════════════════════════════════════════════════════════════════
 """
 
@@ -72,52 +74,11 @@ html,body,[class*="css"],.stApp,
 section[data-testid="stSidebar"],
 div[data-testid="stAppViewContainer"],
 div[data-testid="stHeader"],
-div[data-testid="stToolbar"],
-div[data-testid="stDecoration"],
-div[data-testid="stStatusWidget"],
-div[data-testid="stDeployButton"],
-header[data-testid="stHeader"],
 .main,.block-container {{
     background-color:{T["bg"]} !important;
     color:{T["muted"]} !important;
     font-family:'IBM Plex Sans',sans-serif;
 }}
-
-/* ── Top bar: the white strip at the very top of Streamlit apps ── */
-/* Streamlit renders a header bar with a white background by default. */
-/* These selectors target every known variant across Streamlit versions. */
-header[data-testid="stHeader"] {{
-    background-color:{T["bg"]} !important;
-    border-bottom:1px solid {T["border"]} !important;
-}}
-div[data-testid="stToolbar"] {{
-    background-color:{T["bg"]} !important;
-}}
-/* The decoration bar is a 2px coloured stripe at the very top */
-div[data-testid="stDecoration"] {{
-    background:{T["red"]} !important;
-    height:2px !important;
-}}
-/* Status widget (hamburger menu area) */
-div[data-testid="stStatusWidget"] {{
-    background-color:{T["bg"]} !important;
-}}
-/* The "Deploy" button area */
-div[data-testid="stDeployButton"] {{
-    background-color:{T["bg"]} !important;
-}}
-/* Main app view container background */
-div[data-testid="stAppViewContainer"] {{
-    background-color:{T["bg"]} !important;
-}}
-/* Catch-all for any remaining white containers */
-.stApp > header {{
-    background-color:{T["bg"]} !important;
-}}
-.stApp > div:first-child {{
-    background-color:{T["bg"]} !important;
-}}
-
 .main .block-container {{ padding:1.5rem 2rem; max-width:1400px; }}
 [data-testid="stSidebar"] {{
     background-color:{T["card"]} !important;
@@ -206,89 +167,6 @@ hr {{ border-color:{T["border"]} !important; opacity:1 !important; }}
 ::-webkit-scrollbar {{ width:4px; height:4px; }}
 ::-webkit-scrollbar-track {{ background:{T["bg"]}; }}
 ::-webkit-scrollbar-thumb {{ background:{T["border"]}; border-radius:2px; }}
-
-/* ── Force dark on DataFrame tables ── */
-.stDataFrame {{ background:#0d1117 !important; }}
-.stDataFrame table {{ background:#0d1117 !important; }}
-.stDataFrame thead tr th {{
-    background:#0d1117 !important;
-    color:#6b7a99 !important;
-    border-bottom:1px solid #1e2530 !important;
-    font-family:'IBM Plex Mono',monospace !important;
-    font-size:.68rem !important;
-}}
-.stDataFrame tbody tr td {{
-    background:#0d1117 !important;
-    color:#9aa3b8 !important;
-    border-bottom:1px solid #1e2530 !important;
-    font-family:'IBM Plex Mono',monospace !important;
-    font-size:.75rem !important;
-}}
-.stDataFrame tbody tr:hover td {{ background:#111827 !important; }}
-
-/* ── Number inputs ── */
-.stNumberInput input {{
-    background:#0d1117 !important;
-    border:1px solid #1e2530 !important;
-    color:#f0f4ff !important;
-    font-family:'IBM Plex Mono',monospace !important;
-}}
-.stNumberInput > div > div {{
-    background:#0d1117 !important;
-    border:1px solid #1e2530 !important;
-}}
-
-/* ── Radio buttons ── */
-.stRadio > div {{ background:#0a0e14 !important; }}
-.stRadio label {{
-    color:#9aa3b8 !important;
-    font-family:'IBM Plex Mono',monospace !important;
-    font-size:.72rem !important;
-}}
-
-/* ── Expander content ── */
-div[data-testid="stExpander"] > div {{
-    background:#0d1117 !important;
-    border:none !important;
-}}
-div[data-testid="stExpanderDetails"] {{
-    background:#0d1117 !important;
-}}
-
-/* ── Multiselect ── */
-.stMultiSelect > div > div {{
-    background:#0d1117 !important;
-    border:1px solid #1e2530 !important;
-    color:#f0f4ff !important;
-}}
-
-/* ── Tab panel ── */
-div[data-testid="stTabsContent"] {{ background:#0a0e14 !important; }}
-[data-baseweb="tab-panel"] {{ background:#0a0e14 !important; }}
-
-/* ── Caption ── */
-.stCaptionContainer p, .stCaption, small {{
-    color:#6b7a99 !important;
-    font-family:'IBM Plex Mono',monospace !important;
-    font-size:.65rem !important;
-}}
-
-/* ── Spinner ── */
-.stSpinner > div > div {{ border-top-color:#e63946 !important; }}
-
-/* ── Select slider track ── */
-.stSlider [data-baseweb="slider"] {{ background:#1e2530 !important; }}
-
-/* ── Notification / warning / info boxes ── */
-[data-testid="stNotification"], .stAlert, [data-baseweb="notification"] {{
-    background:#0d1117 !important;
-    border:1px solid #1e2530 !important;
-    color:#9aa3b8 !important;
-    font-family:'IBM Plex Mono',monospace !important;
-}}
-
-/* ── Tooltip / popover ── */
-[data-baseweb="tooltip"] {{ background:#0d1117 !important; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -762,143 +640,12 @@ def chart_heatmap(sens_df,cur_price):
         zmid=cur_price,showscale=True,
         colorbar=dict(tickfont=dict(family="IBM Plex Mono, monospace",size=9),
                       title=dict(text="Price ($)",font=dict(size=9)))))
-    # margin already defined in LAYOUT — cannot pass twice or Python throws TypeError
-    layout_no_margin = {k:v for k,v in LAYOUT.items() if k != "margin"}
-    fig.update_layout(**layout_no_margin, height=320,
-        margin=dict(l=60,r=40,t=40,b=40),
-        title=dict(text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
+    fig.update_layout(**LAYOUT,height=320,
+        title=dict(text="Sensitivity: Implied Price vs WACC × Terminal Growth Rate",
                    font=dict(size=11),x=0),
-        xaxis_title="Terminal Growth Rate", yaxis_title="WACC")
+        xaxis_title="Terminal Growth Rate",yaxis_title="WACC",
+        margin=dict(l=60,r=40,t=40,b=40))
     return fig
-
-# ─────────────────────────────────────────────────────────────────
-# HTML TABLE RENDERER
-# st.dataframe uses an iframe shadow DOM that CSS cannot reach,
-# so it always renders with a white background regardless of theme.
-# The only reliable fix is to render tables as raw HTML using
-# st.markdown(unsafe_allow_html=True).
-# This function converts a DataFrame to a styled dark HTML table.
-# ─────────────────────────────────────────────────────────────────
-def dark_table(df: pd.DataFrame, height_px: int = None) -> str:
-    """
-    Convert a DataFrame to a dark-themed HTML table string.
-    Returns HTML that can be passed to st.markdown(unsafe_allow_html=True).
-    """
-    bg      = T["card"]
-    border  = T["border"]
-    primary = T["primary"]
-    muted   = T["muted"]
-    faint   = T["faint"]
-    card2   = T["card2"]
-
-    scroll_style = f"max-height:{height_px}px;overflow-y:auto;" if height_px else ""
-
-    html = f"""
-    <div style="background:{bg};border:1px solid {border};{scroll_style}overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:.74rem;">
-    <thead>
-    <tr>
-    <th style="background:{bg};color:{faint};font-size:.63rem;letter-spacing:.1em;
-               text-transform:uppercase;padding:.5rem .7rem;border-bottom:1px solid {border};
-               text-align:left;white-space:nowrap;">{df.index.name or ""}</th>
-    """
-    for col in df.columns:
-        html += f'<th style="background:{bg};color:{faint};font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;padding:.5rem .7rem;border-bottom:1px solid {border};text-align:right;white-space:nowrap;">{col}</th>'
-    html += "</tr></thead><tbody>"
-
-    for i, (idx, row) in enumerate(df.iterrows()):
-        row_bg = card2 if i % 2 == 1 else bg
-        html += f'<tr style="background:{row_bg};">'
-        html += f'<td style="color:{faint};padding:.45rem .7rem;border-bottom:1px solid {border};white-space:nowrap;">{idx}</td>'
-        for val in row.values:
-            # Colour positive/negative values
-            if isinstance(val, str):
-                color = primary
-            elif isinstance(val, (int, float)) and not pd.isna(val):
-                color = muted
-            else:
-                color = faint
-                val = "—"
-            html += f'<td style="color:{color};padding:.45rem .7rem;border-bottom:1px solid {border};text-align:right;white-space:nowrap;">{val}</td>'
-        html += "</tr>"
-
-    html += "</tbody></table></div>"
-    return html
-
-
-def dark_table_from_styled(df: pd.DataFrame, fmt: dict = None,
-                            focus_idx: str = None, height_px: int = None) -> str:
-    """
-    Render comps-style table with focus row highlight and green/red extremes per column.
-    fmt: dict of {col: format_func} same as pandas .format()
-    focus_idx: index value to highlight in red
-    """
-    bg      = T["card"]
-    border  = T["border"]
-    primary = T["primary"]
-    muted   = T["muted"]
-    faint   = T["faint"]
-    red     = T["red"]
-    teal    = T["teal"]
-
-    scroll_style = f"max-height:{height_px}px;overflow-y:auto;" if height_px else ""
-
-    # Pre-compute min/max for numeric columns
-    extremes = {}
-    for col in df.columns:
-        num = pd.to_numeric(df[col], errors="coerce")
-        if num.notna().sum() >= 2:
-            extremes[col] = {"max": num.idxmax(), "min": num.idxmin()}
-
-    html = f"""
-    <div style="background:{bg};border:1px solid {border};{scroll_style}overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:.74rem;">
-    <thead><tr>
-    <th style="background:{bg};color:{faint};font-size:.62rem;letter-spacing:.12em;
-               text-transform:uppercase;padding:.5rem .8rem;
-               border-bottom:2px solid {border};text-align:left;">Ticker</th>
-    """
-    for col in df.columns:
-        html += (f'<th style="background:{bg};color:{faint};font-size:.62rem;'
-                 f'letter-spacing:.08em;text-transform:uppercase;padding:.5rem .6rem;'
-                 f'border-bottom:2px solid {border};text-align:right;white-space:nowrap;">{col}</th>')
-    html += "</tr></thead><tbody>"
-
-    for idx, row in df.iterrows():
-        is_focus = (idx == focus_idx)
-        row_bg   = f"rgba(230,57,70,0.10)" if is_focus else bg
-        fw       = "600" if is_focus else "400"
-        html += f'<tr style="background:{row_bg};">'
-        html += (f'<td style="color:{red if is_focus else faint};font-weight:{fw};'
-                 f'padding:.45rem .8rem;border-bottom:1px solid {border};">{idx}</td>')
-        for col, val in row.items():
-            # Format value
-            if fmt and col in fmt:
-                try:
-                    disp = fmt[col](val) if pd.notna(val) else "—"
-                except Exception:
-                    disp = "—"
-            else:
-                disp = str(val) if pd.notna(val) else "—"
-
-            # Colour: focus row uses primary, extremes get teal/red, others get muted
-            if is_focus:
-                color = primary
-            elif col in extremes and idx == extremes[col]["max"]:
-                color = teal
-            elif col in extremes and idx == extremes[col]["min"]:
-                color = red
-            else:
-                color = muted
-
-            html += (f'<td style="color:{color};font-weight:{fw};padding:.45rem .6rem;'
-                     f'border-bottom:1px solid {border};text-align:right;'
-                     f'white-space:nowrap;">{disp}</td>')
-        html += "</tr>"
-
-    html += "</tbody></table></div>"
-    return html
-
 
 # ─────────────────────────────────────────────────────────────────
 # SIDEBAR
@@ -1099,20 +846,25 @@ with tab1:
     af={k:v for k,v in fmt_map.items() if k in dc}
     hc=[c for c in ["EV/EBITDA","EV/Revenue","P/E","EBITDA Margin",
                      "Rev Growth YoY","Net Debt/EBITDA"] if c in dc]
-    # Render as HTML — st.dataframe uses an iframe shadow DOM that CSS
-    # cannot reach, causing a white background regardless of theme settings.
-    comps_indexed = dd.set_index("Ticker")
-    st.markdown(
-        dark_table_from_styled(comps_indexed, fmt=af, focus_idx=focus),
-        unsafe_allow_html=True
-    )
+    styled=(dd.set_index("Ticker").style
+            .apply(_sr,axis=1)
+            .apply(_hl,axis=0,subset=hc)
+            .format(af)
+            .set_table_styles([
+                {"selector":"th","props":[("background-color",T["card"]),("color",T["faint"]),
+                    ("font-size",".68rem"),("font-family","IBM Plex Mono, monospace"),
+                    ("border-bottom",f"1px solid {T['border']}"),("text-align","right")]},
+                {"selector":"td","props":[("font-family","IBM Plex Mono, monospace"),
+                    ("font-size",".76rem"),("border-bottom",f"1px solid {T['border']}"),
+                    ("text-align","right")]},
+            ]))
+    st.dataframe(styled,use_container_width=True,height=min(80+len(df)*40,480))
 
     with st.expander("📐 Peer median / mean"):
         nc=[c for c in ["EV/EBITDA","EV/Revenue","P/E","EBITDA Margin",
                          "Net Debt/EBITDA","Div Yield"] if c in df.columns]
-        sm=df[nc].agg(["median","mean"]).round(2)
-        sm.index=["Peer Median","Peer Mean"]
-        st.markdown(dark_table(sm), unsafe_allow_html=True)
+        sm=df[nc].agg(["median","mean"]).round(2); sm.index=["Peer Median","Peer Mean"]
+        st.dataframe(sm,use_container_width=True)
 
     # ── Charts ──
     st.markdown('<div class="slbl">📈 PEER COMPARISON CHARTS</div>', unsafe_allow_html=True)
@@ -1341,10 +1093,13 @@ with tab2:
                 res["years"],res["revenue"],res["ebit"],res["nopat"],
                 res["da"],res["capex"],res["fcf"],res["pv_fcf"])}
         }).set_index("")
-        # Render as HTML to guarantee dark background
-        fmt_dcf = {col: (lambda x: f"{x:.2f}" if pd.notna(x) else "—")
-                   for col in dcf_df.columns}
-        st.markdown(dark_table(dcf_df, height_px=300), unsafe_allow_html=True)
+        st.dataframe(dcf_df.style.format("{:.2f}")
+            .set_table_styles([
+                {"selector":"th","props":[("background",T["card"]),("color",T["faint"]),
+                    ("font-family","IBM Plex Mono, monospace"),("font-size",".7rem")]},
+                {"selector":"td","props":[("font-family","IBM Plex Mono, monospace"),
+                    ("font-size",".75rem"),("color",T["muted"])]},
+            ]),use_container_width=True,height=300)
 
         st.markdown(f"""
         <div class="val-card">
