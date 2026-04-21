@@ -145,7 +145,7 @@ div[data-testid="stAppViewContainer"] {{
     background-color:{T["card"]} !important;
     border-right:1px solid {T["border"]} !important;
 }}
-[data-testid="stSidebar"] .block-container { padded:1.2rem 1rem; }
+[data-testid="stSidebar"] .block-container {{ padding:1.2rem 1rem; }}
 
 /* ── Sidebar collapse/expand arrow ── */
 [data-testid="stSidebarCollapsedControl"] button svg,
@@ -153,16 +153,16 @@ div[data-testid="stAppViewContainer"] {{
 [data-testid="stSidebar"] button svg,
 button[aria-label="Collapse sidebar"] svg,
 button[aria-label="Expand sidebar"] svg,
-[class*="collapsedControl"] svg {
+[class*="collapsedControl"] svg {{
     color:#f0f4ff !important;
     fill:#f0f4ff !important;
-}
+}}
 [data-testid="stSidebarCollapsedControl"] button,
 button[aria-label="Collapse sidebar"],
-button[aria-label="Expand sidebar"] {
+button[aria-label="Expand sidebar"] {{
     background:#0d1117 !important;
     border:1px solid #1e2530 !important;
-}
+}}
 
 .stTabs [data-baseweb="tab-list"] {{
     background:{T["card"]};
