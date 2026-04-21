@@ -3,8 +3,6 @@
   EQUITY RESEARCH DASHBOARD
   Tab 1 — Trading Comparables + News Feed
   Tab 2 — Valuation (DCF + EV/EBITDA Exit + Football Field)
-  Author: [Your Name]
-  Stack:  Python · Streamlit · yfinance · Plotly
 ═══════════════════════════════════════════════════════════════════
 """
 
@@ -57,13 +55,10 @@ LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=11),
     margin=dict(l=40, r=20, t=40, b=40),
+    title=dict(font=dict(color=T["primary"], size 14),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
 )
-# xaxis and yaxis deliberately excluded from LAYOUT.
-# Passing xaxis=dict(...) via **LAYOUT alongside xaxis_title= causes
-# TypeError: duplicate keyword argument in Python.
-# Use _ax(fig) after every update_layout() call to apply axis grid styling.
 
 def _ax(fig, subplots=False, rows=2, cols=1):
     """
