@@ -145,7 +145,7 @@ div[data-testid="stAppViewContainer"] {{
     background-color:{T["card"]} !important;
     border-right:1px solid {T["border"]} !important;
 }}
-[data-testid="stSidebar"] .block-container { padding:1.2rem 1rem; }
+[data-testid="stSidebar"] .block-container { padded:1.2rem 1rem; }
 
 /* ── Sidebar collapse/expand arrow ── */
 [data-testid="stSidebarCollapsedControl"] button svg,
