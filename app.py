@@ -55,10 +55,13 @@ LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=11),
     margin=dict(l=40, r=20, t=40, b=40),
-    title=dict(font=dict(color=T["primary"], size=14),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
-))
+)
+# xaxis and yaxis deliberately excluded from LAYOUT.
+# Passing xaxis=dict(...) via **LAYOUT alongside xaxis_title= causes
+# TypeError: duplicate keyword argument in Python.
+# Use _ax(fig) after every update_layout() call to apply axis grid styling.
 
 def _ax(fig, subplots=False, rows=2, cols=1):
     """
@@ -142,7 +145,24 @@ div[data-testid="stAppViewContainer"] {{
     background-color:{T["card"]} !important;
     border-right:1px solid {T["border"]} !important;
 }}
-[data-testid="stSidebar"] .block-container {{ padding:1.2rem 1rem; }}
+[data-testid="stSidebar"] .block-container { padding:1.2rem 1rem; }
+
+/* ── Sidebar collapse/expand arrow ── */
+[data-testid="stSidebarCollapsedControl"] button svg,
+[data-testid="stSidebarCollapseButton"] svg,
+[data-testid="stSidebar"] button svg,
+button[aria-label="Collapse sidebar"] svg,
+button[aria-label="Expand sidebar"] svg,
+[class*="collapsedControl"] svg {
+    color:#f0f4ff !important;
+    fill:#f0f4ff !important;
+}
+[data-testid="stSidebarCollapsedControl"] button,
+button[aria-label="Collapse sidebar"],
+button[aria-label="Expand sidebar"] {
+    background:#0d1117 !important;
+    border:1px solid #1e2530 !important;
+}
 
 .stTabs [data-baseweb="tab-list"] {{
     background:{T["card"]};
