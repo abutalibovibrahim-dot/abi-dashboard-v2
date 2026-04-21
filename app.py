@@ -3,8 +3,6 @@
   EQUITY RESEARCH DASHBOARD
   Tab 1 — Trading Comparables + News Feed
   Tab 2 — Valuation (DCF + EV/EBITDA Exit + Football Field)
-  Author: [Your Name]
-  Stack:  Python · Streamlit · yfinance · Plotly
 ═══════════════════════════════════════════════════════════════════
 """
 
@@ -640,11 +638,12 @@ def chart_heatmap(sens_df,cur_price):
         zmid=cur_price,showscale=True,
         colorbar=dict(tickfont=dict(family="IBM Plex Mono, monospace",size=9),
                       title=dict(text="Price ($)",font=dict(size=9)))))
-    fig.update_layout(**LAYOUT,height=320,
-        title=dict(text="Sensitivity: Implied Price vs WACC × Terminal Growth Rate",
-                   font=dict(size=11),x=0),
-        xaxis_title="Terminal Growth Rate",yaxis_title="WACC",
-        margin=dict(l=60,r=40,t=40,b=40))
+  layout_no_margin = {k:v for k,v in LAYOUT.items() if k != "margin"}
+fig.update_layout(**layout_no_margin, height=320,
+    margin=dict(l=60,r=40,t=40,b=40),
+    title=dict(text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
+               font=dict(size=11),x=0),
+    xaxis_title="Terminal Growth Rate", yaxis_title="WACC")
     return fig
 
 # ─────────────────────────────────────────────────────────────────
