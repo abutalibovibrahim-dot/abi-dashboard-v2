@@ -54,13 +54,24 @@ LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=11),
-    title=dict(font=dict(color=T["primary"])),  
     margin=dict(l=40, r=20, t=40, b=40),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
-    xaxis=dict(gridcolor=T["cgrid"], linecolor=T["cline"], zerolinecolor=T["cline"]),
-    yaxis=dict(gridcolor=T["cgrid"], linecolor=T["cline"], zerolinecolor=T["cline"]),
 )
+# xaxis and yaxis deliberately excluded from LAYOUT.
+# Passing xaxis=dict(...) via **LAYOUT alongside xaxis_title= causes
+# TypeError: duplicate keyword argument in Python.
+# Use _ax(fig) after every update_layout() call to apply axis grid styling.
+
+def _ax(fig, rows=1, cols=1):
+    """Apply dark grid styling to all axes. Call after every update_layout()."""
+    s = dict(gridcolor=T["cgrid"], linecolor=T["cline"], zerolinecolor=T["cline"])
+    for r in range(1, rows+1):
+        for c in range(1, cols+1):
+            fig.update_xaxes(s, row=r, col=c)
+            fig.update_yaxes(s, row=r, col=c)
+    return fig
+
 
 # ─────────────────────────────────────────────────────────────────
 # CSS
@@ -638,6 +649,7 @@ def chart_prices(df,tickers,focus):
     fig.update_layout(**LAYOUT,height=360,
         title=dict(text="Indexed Price Performance (Base = 100)",font=dict(size=11),x=0),
         yaxis_title="Indexed",hovermode="x unified")
+    _ax(fig)
     return fig
 
 def chart_scatter(df,focus):
@@ -649,6 +661,7 @@ def chart_scatter(df,focus):
     if df_s.empty:
         fig.update_layout(**LAYOUT,height=360,
             title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=11),x=0))
+        _ax(fig)
         fig.add_annotation(text="Insufficient data — EV/EBITDA or Rev Growth unavailable",
             xref="paper",yref="paper",x=0.5,y=0.5,showarrow=False,
             font=dict(color=T["faint"],size=11))
@@ -672,6 +685,7 @@ def chart_scatter(df,focus):
     fig.update_layout(**LAYOUT,height=360,showlegend=False,
         title=dict(text="EV/EBITDA vs Revenue Growth",font=dict(size=11),x=0),
         xaxis_title="Rev Growth YoY (%)",yaxis_title="EV/EBITDA (x)")
+    _ax(fig)
     fig.add_hline(y=med,line_dash="dash",line_color=T["faint"],
         annotation_text=f"Median {med:.1f}x",annotation_font_size=9)
     return fig
@@ -685,6 +699,7 @@ def chart_bar(series,title,suffix,focus):
         textfont=dict(size=10,family="IBM Plex Mono, monospace")))
     fig.update_layout(**LAYOUT,height=max(240,len(s)*40),
         title=dict(text=title,font=dict(size=11),x=0),showlegend=False)
+    _ax(fig)
     fig.update_xaxes(showgrid=False)
     return fig
 
@@ -697,6 +712,7 @@ def chart_leverage(df,focus):
     fig.update_layout(**LAYOUT,height=280,
         title=dict(text="Net Debt / EBITDA",font=dict(size=11),x=0),
         yaxis_title="Net Debt / EBITDA (x)")
+    _ax(fig)
     fig.add_hline(y=3.0,line_dash="dash",line_color=T["red"],
         annotation_text="3.0x",annotation_font_size=9,annotation_font_color=T["red"])
     return fig
@@ -719,8 +735,8 @@ def chart_candle(hist,ticker):
     fig.update_layout(**LAYOUT,height=440,
         title=dict(text=f"{ticker} — Price & Volume | MA50 · MA200",font=dict(size=11),x=0),
         xaxis_rangeslider_visible=False)
-    fig.update_yaxes(gridcolor=T["cgrid"],row=1,col=1)
-    fig.update_yaxes(gridcolor=T["cgrid"],row=2,col=1,title_text="Volume")
+    _ax(fig, rows=2, cols=1)
+    fig.update_yaxes(title_text="Volume",row=2,col=1)
     return fig
 
 def chart_waterfall(res):
@@ -736,6 +752,7 @@ def chart_waterfall(res):
         textfont=dict(size=9,family="IBM Plex Mono, monospace",color=T["muted"])))
     fig.update_layout(**LAYOUT,height=380,showlegend=False,
         title=dict(text="DCF Value Bridge ($B)",font=dict(size=11),x=0))
+    _ax(fig)
     return fig
 
 def chart_fcf(res):
@@ -746,6 +763,7 @@ def chart_fcf(res):
     fig.update_layout(**LAYOUT,height=280,
         title=dict(text="Projected Free Cash Flow ($B)",font=dict(size=11),x=0),
         yaxis_title="FCF ($B)",showlegend=False)
+    _ax(fig)
     return fig
 
 def chart_heatmap(sens_df, cur_price):
@@ -1502,6 +1520,7 @@ with tab2:
             title=dict(text="Football Field — Implied Share Price Range by Methodology",
                        font=dict(size=11),x=0),
             xaxis_title="Implied Share Price ($)",barmode="overlay")
+        _ax(fig_ff)
         st.plotly_chart(fig_ff,use_container_width=True,config={"displayModeBar":False})
 
     # Methodology notes
