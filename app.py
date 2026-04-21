@@ -53,7 +53,7 @@ T = {
 LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="IBM Plex Mono, monospace", color=T["faint"], size=14),
+    font=dict(family="IBM Plex Mono, monospace", color=T["primary"], size=14),
     margin=dict(l=40, r=20, t=40, b=40),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["cline"],
                 borderwidth=1, font=dict(size=10)),
