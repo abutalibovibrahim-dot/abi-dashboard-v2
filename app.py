@@ -3,6 +3,8 @@
   EQUITY RESEARCH DASHBOARD
   Tab 1 — Trading Comparables + News Feed
   Tab 2 — Valuation (DCF + EV/EBITDA Exit + Football Field)
+  Author: [Your Name]
+  Stack:  Python · Streamlit · yfinance · Plotly
 ═══════════════════════════════════════════════════════════════════
 """
 
@@ -63,13 +65,23 @@ LAYOUT = dict(
 # TypeError: duplicate keyword argument in Python.
 # Use _ax(fig) after every update_layout() call to apply axis grid styling.
 
-def _ax(fig, rows=1, cols=1):
-    """Apply dark grid styling to all axes. Call after every update_layout()."""
+def _ax(fig, subplots=False, rows=2, cols=1):
+    """
+    Apply dark grid styling to all axes.
+    subplots=False  → simple figure, no row/col args (default for all standard charts)
+    subplots=True   → make_subplots figure, loop over rows/cols (candlestick only)
+    row/col args only valid on subplot figures — passing them to a regular figure
+    raises Exception from plotly.basedatatypes._validate_get_grid_ref().
+    """
     s = dict(gridcolor=T["cgrid"], linecolor=T["cline"], zerolinecolor=T["cline"])
-    for r in range(1, rows+1):
-        for c in range(1, cols+1):
-            fig.update_xaxes(s, row=r, col=c)
-            fig.update_yaxes(s, row=r, col=c)
+    if subplots:
+        for r in range(1, rows+1):
+            for c in range(1, cols+1):
+                fig.update_xaxes(s, row=r, col=c)
+                fig.update_yaxes(s, row=r, col=c)
+    else:
+        fig.update_xaxes(s)
+        fig.update_yaxes(s)
     return fig
 
 
@@ -735,7 +747,7 @@ def chart_candle(hist,ticker):
     fig.update_layout(**LAYOUT,height=440,
         title=dict(text=f"{ticker} — Price & Volume | MA50 · MA200",font=dict(size=11),x=0),
         xaxis_rangeslider_visible=False)
-    _ax(fig, rows=2, cols=1)
+    _ax(fig, subplots=True, rows=2, cols=1)
     fig.update_yaxes(title_text="Volume",row=2,col=1)
     return fig
 
