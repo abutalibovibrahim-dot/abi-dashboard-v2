@@ -165,6 +165,89 @@ hr {{ border-color:{T["border"]} !important; opacity:1 !important; }}
 ::-webkit-scrollbar {{ width:4px; height:4px; }}
 ::-webkit-scrollbar-track {{ background:{T["bg"]}; }}
 ::-webkit-scrollbar-thumb {{ background:{T["border"]}; border-radius:2px; }}
+
+/* ── Force dark on DataFrame tables ── */
+.stDataFrame {{ background:#0d1117 !important; }}
+.stDataFrame table {{ background:#0d1117 !important; }}
+.stDataFrame thead tr th {{
+    background:#0d1117 !important;
+    color:#6b7a99 !important;
+    border-bottom:1px solid #1e2530 !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.68rem !important;
+}}
+.stDataFrame tbody tr td {{
+    background:#0d1117 !important;
+    color:#9aa3b8 !important;
+    border-bottom:1px solid #1e2530 !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.75rem !important;
+}}
+.stDataFrame tbody tr:hover td {{ background:#111827 !important; }}
+
+/* ── Number inputs ── */
+.stNumberInput input {{
+    background:#0d1117 !important;
+    border:1px solid #1e2530 !important;
+    color:#f0f4ff !important;
+    font-family:'IBM Plex Mono',monospace !important;
+}}
+.stNumberInput > div > div {{
+    background:#0d1117 !important;
+    border:1px solid #1e2530 !important;
+}}
+
+/* ── Radio buttons ── */
+.stRadio > div {{ background:#0a0e14 !important; }}
+.stRadio label {{
+    color:#9aa3b8 !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.72rem !important;
+}}
+
+/* ── Expander content ── */
+div[data-testid="stExpander"] > div {{
+    background:#0d1117 !important;
+    border:none !important;
+}}
+div[data-testid="stExpanderDetails"] {{
+    background:#0d1117 !important;
+}}
+
+/* ── Multiselect ── */
+.stMultiSelect > div > div {{
+    background:#0d1117 !important;
+    border:1px solid #1e2530 !important;
+    color:#f0f4ff !important;
+}}
+
+/* ── Tab panel ── */
+div[data-testid="stTabsContent"] {{ background:#0a0e14 !important; }}
+[data-baseweb="tab-panel"] {{ background:#0a0e14 !important; }}
+
+/* ── Caption ── */
+.stCaptionContainer p, .stCaption, small {{
+    color:#6b7a99 !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.65rem !important;
+}}
+
+/* ── Spinner ── */
+.stSpinner > div > div {{ border-top-color:#e63946 !important; }}
+
+/* ── Select slider track ── */
+.stSlider [data-baseweb="slider"] {{ background:#1e2530 !important; }}
+
+/* ── Notification / warning / info boxes ── */
+[data-testid="stNotification"], .stAlert, [data-baseweb="notification"] {{
+    background:#0d1117 !important;
+    border:1px solid #1e2530 !important;
+    color:#9aa3b8 !important;
+    font-family:'IBM Plex Mono',monospace !important;
+}}
+
+/* ── Tooltip / popover ── */
+[data-baseweb="tooltip"] {{ background:#0d1117 !important; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -639,7 +722,7 @@ def chart_heatmap(sens_df,cur_price):
         colorbar=dict(tickfont=dict(family="IBM Plex Mono, monospace",size=9),
                       title=dict(text="Price ($)",font=dict(size=9)))))
     fig.update_layout(**LAYOUT,height=320,
-        title=dict(text="Sensitivity: Implied Price vs WACC × Terminal Growth Rate",
+        title=dict(text="Sensitivity: Implied Price vs WACC x Terminal Growth Rate",
                    font=dict(size=11),x=0),
         xaxis_title="Terminal Growth Rate",yaxis_title="WACC",
         margin=dict(l=60,r=40,t=40,b=40))
