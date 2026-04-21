@@ -3,8 +3,6 @@
   EQUITY RESEARCH DASHBOARD
   Tab 1 — Trading Comparables + News Feed
   Tab 2 — Valuation (DCF + EV/EBITDA Exit + Football Field)
-  Author: [Your Name]
-  Stack:  Python · Streamlit · yfinance · Plotly
 ═══════════════════════════════════════════════════════════════════
 """
 
